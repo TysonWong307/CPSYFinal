@@ -24,6 +24,7 @@ let pool;
 
 async function getPool() {
   if (!pool) {
+    console.log(config);
     pool = await sql.connect(config);
     console.log('✅ Connected to Azure SQL Database');
   }
