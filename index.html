@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WAIT — Western Alberta Institute of Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ───────────────────────────────────────────────── */
+    :root {
+      --navy:    #0B1F3A;
+      --navy2:   #122848;
+      --gold:    #C9922A;
+      --gold2:   #E8B24A;
+      --cream:   #F7F3EC;
+      --white:   #FFFFFF;
+      --gray:    #6B7280;
+      --light:   #EFF2F7;
+      --red:     #C0392B;
+      --green:   #1A7A4A;
+      --radius:  6px;
+      --shadow:  0 4px 24px rgba(11,31,58,.13);
+      --trans:   .22s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── UTILITY ──────────────────────────────────────────────── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .hidden    { display: none !important; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif; font-weight: 600;
+      font-size: .95rem; cursor: pointer; border: 2px solid transparent;
+      transition: all var(--trans); text-decoration: none;
+    }
+    .btn-primary { background: var(--gold); color: var(--white); border-color: var(--gold); }
+    .btn-primary:hover { background: var(--gold2); border-color: var(--gold2); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--navy); border-color: var(--navy); }
+    .btn-outline:hover { background: var(--navy); color: var(--white); }
+    .btn-white  { background: var(--white); color: var(--navy); }
+    .btn-white:hover { background: var(--cream); transform: translateY(-1px); }
+    .btn-sm     { padding: 8px 18px; font-size: .88rem; }
+
+    .section-label {
+      display: inline-block; font-size: .78rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 10px;
+    }
+    h2.section-title {
+      font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 14px;
+    }
+    .section-sub { color: var(--gray); font-size: 1.05rem; max-width: 560px; }
+
+    /* ── TOP BAR ──────────────────────────────────────────────── */
+    .topbar {
+      background: var(--navy2); color: rgba(255,255,255,.7);
+      font-size: .8rem; padding: 7px 0;
+    }
+    .topbar .container { display: flex; justify-content: space-between; align-items: center; }
+    .topbar a { color: rgba(255,255,255,.7); text-decoration: none; }
+    .topbar a:hover { color: var(--gold2); }
+    .topbar-links { display: flex; gap: 20px; }
+
+    /* ── NAVBAR ───────────────────────────────────────────────── */
+    nav {
+      background: var(--white); border-bottom: 3px solid var(--gold);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 16px rgba(11,31,58,.09);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 70px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    .logo-badge {
+      width: 46px; height: 46px; background: var(--navy);
+      border-radius: 4px; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+    }
+    .logo-badge svg { width: 28px; height: 28px; fill: var(--gold); }
+    .logo-text { line-height: 1.1; }
+    .logo-abbr {
+      font-family: 'Playfair Display', serif; font-size: 1.3rem;
+      font-weight: 900; color: var(--navy);
+    }
+    .logo-full { font-size: .7rem; color: var(--gray); font-weight: 500; }
+
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a {
+      padding: 8px 14px; border-radius: var(--radius); font-weight: 500;
+      font-size: .92rem; color: var(--navy); text-decoration: none;
+      transition: all var(--trans);
+    }
+    .nav-links a:hover { background: var(--light); color: var(--gold); }
+
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    #nav-user-info { font-size: .9rem; color: var(--navy); font-weight: 500; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--navy); border-radius: 2px; transition: var(--trans); }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      background: var(--navy);
+      position: relative; overflow: hidden;
+      padding: 100px 0 80px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,146,42,.18), transparent),
+                  repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(255,255,255,.015) 60px, rgba(255,255,255,.015) 61px);
+    }
+    .hero-inner {
+      position: relative; display: grid;
+      grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 900; color: var(--white);
+      line-height: 1.1; margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--gold2); }
+    .hero p { color: rgba(255,255,255,.75); font-size: 1.1rem; margin-bottom: 32px; max-width: 480px; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .hero-card {
+      background: rgba(255,255,255,.07); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.12); border-radius: 12px;
+      padding: 32px;
+      animation: floatUp .8s ease both;
+    }
+    @keyframes floatUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .stat { text-align: center; padding: 18px; background: rgba(255,255,255,.06); border-radius: 8px; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; color: var(--gold2); }
+    .stat-label { font-size: .8rem; color: rgba(255,255,255,.6); margin-top: 4px; }
+
+    /* ── PROGRAMS ─────────────────────────────────────────────── */
+    .programs { padding: 90px 0; }
+    .programs-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; flex-wrap: wrap; gap: 16px; }
+    .programs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+
+    .program-card {
+      background: var(--white); border-radius: 10px;
+      border: 1px solid rgba(11,31,58,.1);
+      padding: 28px; transition: all var(--trans);
+      cursor: pointer; position: relative; overflow: hidden;
+    }
+    .program-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 3px; background: var(--gold);
+      transition: width var(--trans);
+    }
+    .program-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .program-card:hover::after { width: 100%; }
+
+    .program-icon {
+      width: 52px; height: 52px; border-radius: 10px;
+      background: var(--light); display: flex; align-items: center;
+      justify-content: center; margin-bottom: 18px; font-size: 1.6rem;
+    }
+    .program-card h3 { font-family: 'Playfair Display', serif; font-size: 1.18rem; margin-bottom: 8px; }
+    .program-card p  { font-size: .9rem; color: var(--gray); line-height: 1.6; }
+    .program-meta    { margin-top: 16px; display: flex; gap: 16px; flex-wrap: wrap; }
+    .program-tag {
+      font-size: .75rem; font-weight: 600; padding: 3px 10px;
+      border-radius: 20px; background: var(--light); color: var(--navy);
+    }
+
+    /* ── WHY WAIT ─────────────────────────────────────────────── */
+    .why { background: var(--navy); padding: 90px 0; }
+    .why-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .why h2.section-title { color: var(--white); }
+    .why .section-sub { color: rgba(255,255,255,.65); }
+    .why .section-label { color: var(--gold2); }
+    .features { display: flex; flex-direction: column; gap: 22px; margin-top: 32px; }
+    .feature { display: flex; gap: 16px; align-items: flex-start; }
+    .feat-icon {
+      width: 42px; height: 42px; flex-shrink: 0; border-radius: 8px;
+      background: rgba(201,146,42,.2); display: flex; align-items: center;
+      justify-content: center; font-size: 1.2rem;
+    }
+    .feature h4 { color: var(--white); font-weight: 600; margin-bottom: 4px; }
+    .feature p  { color: rgba(255,255,255,.6); font-size: .9rem; }
+
+    .why-image {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px; padding: 36px; display: grid;
+      grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .wi-box {
+      background: rgba(255,255,255,.08); border-radius: 8px; padding: 22px;
+      text-align: center;
+    }
+    .wi-num  { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--gold2); }
+    .wi-text { font-size: .82rem; color: rgba(255,255,255,.55); margin-top: 4px; }
+    .wi-box.accent { background: var(--gold); }
+    .wi-box.accent .wi-num, .wi-box.accent .wi-text { color: var(--white); }
+
+    /* ── ADMISSIONS ───────────────────────────────────────────── */
+    .admissions { padding: 90px 0; }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+    .step {
+      text-align: center; padding: 32px 20px;
+      background: var(--white); border-radius: 10px;
+      border: 1px solid rgba(11,31,58,.08);
+      position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '→'; position: absolute; right: -16px; top: 40px;
+      font-size: 1.4rem; color: var(--gold); z-index: 1;
+    }
+    .step-num {
+      width: 48px; height: 48px; background: var(--navy);
+      border-radius: 50%; color: var(--gold2); font-weight: 900;
+      font-size: 1.1rem; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 16px;
+      font-family: 'Playfair Display', serif;
+    }
+    .step h4 { font-weight: 600; margin-bottom: 8px; }
+    .step p  { font-size: .88rem; color: var(--gray); }
+
+    /* ── CAMPUS LIFE ──────────────────────────────────────────── */
+    .campus { padding: 90px 0; background: var(--light); }
+    .campus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+    .campus-card {
+      background: var(--white); border-radius: 10px; overflow: hidden;
+      border: 1px solid rgba(11,31,58,.08); transition: all var(--trans);
+    }
+    .campus-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .campus-img {
+      height: 180px; display: flex; align-items: center;
+      justify-content: center; font-size: 3.5rem;
+    }
+    .campus-img.bg1 { background: linear-gradient(135deg, #0B1F3A, #1A3A60); }
+    .campus-img.bg2 { background: linear-gradient(135deg, #1A3A20, #2D6A35); }
+    .campus-img.bg3 { background: linear-gradient(135deg, #3A1A0B, #7A3A1A); }
+    .campus-body { padding: 22px; }
+    .campus-body h4 { font-weight: 600; margin-bottom: 8px; }
+    .campus-body p  { font-size: .9rem; color: var(--gray); }
+
+    /* ── CONTACT ──────────────────────────────────────────────── */
+    .contact { padding: 90px 0; }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: start; }
+    .contact-info { }
+    .contact-detail { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 24px; }
+    .cd-icon {
+      width: 40px; height: 40px; background: var(--light);
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+    }
+    .cd-text h5 { font-weight: 600; margin-bottom: 2px; }
+    .cd-text p  { color: var(--gray); font-size: .9rem; }
+
+    /* ── FORMS ────────────────────────────────────────────────── */
+    .form-card {
+      background: var(--white); border-radius: 12px;
+      padding: 36px; box-shadow: var(--shadow);
+      border: 1px solid rgba(11,31,58,.08);
+    }
+    .form-card h3 {
+      font-family: 'Playfair Display', serif; font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+    .form-card .subtitle { color: var(--gray); font-size: .92rem; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: .86rem; font-weight: 600; margin-bottom: 6px; color: var(--navy); }
+    input, select, textarea {
+      width: 100%; padding: 11px 14px; border-radius: var(--radius);
+      border: 1.5px solid rgba(11,31,58,.18); font-family: 'DM Sans', sans-serif;
+      font-size: .94rem; color: var(--navy); background: var(--cream);
+      transition: border-color var(--trans);
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--gold);
+      background: var(--white);
+    }
+    textarea { resize: vertical; min-height: 110px; }
+    .form-tabs { display: flex; gap: 0; margin-bottom: 24px; border-radius: var(--radius); overflow: hidden; border: 1.5px solid rgba(11,31,58,.15); }
+    .form-tab {
+      flex: 1; padding: 10px; text-align: center;
+      font-weight: 600; font-size: .92rem; cursor: pointer;
+      background: var(--light); color: var(--gray);
+      border: none; font-family: 'DM Sans', sans-serif;
+      transition: all var(--trans);
+    }
+    .form-tab.active { background: var(--navy); color: var(--white); }
+
+    .alert {
+      padding: 12px 16px; border-radius: var(--radius);
+      font-size: .9rem; margin-bottom: 16px; display: none;
+    }
+    .alert.success { background: #D1FAE5; color: #065F46; border: 1px solid #6EE7B7; display: block; }
+    .alert.error   { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; display: block; }
+    .alert.info    { background: #DBEAFE; color: #1E40AF; border: 1px solid #93C5FD; display: block; }
+
+    /* ── STUDENT DASHBOARD ────────────────────────────────────── */
+    #dashboard-section {
+      background: var(--light); min-height: 60vh; padding: 60px 0;
+    }
+    .dashboard-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 32px;
+    }
+    .dashboard-header h2 {
+      font-family: 'Playfair Display', serif; font-size: 1.8rem;
+    }
+    .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .dash-card {
+      background: var(--white); border-radius: 10px; padding: 28px;
+      border: 1px solid rgba(11,31,58,.08);
+    }
+    .dash-card h4 { font-weight: 700; font-size: 1rem; margin-bottom: 16px; color: var(--gold); text-transform: uppercase; letter-spacing: .07em; font-size: .82rem; }
+    .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--light); font-size: .92rem; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row span:first-child { color: var(--gray); }
+    .info-row span:last-child  { font-weight: 500; }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer { background: var(--navy); color: rgba(255,255,255,.7); padding: 60px 0 28px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    .footer-brand p { font-size: .9rem; margin: 14px 0; max-width: 280px; }
+    .footer-col h5 { color: var(--white); font-weight: 700; margin-bottom: 16px; font-size: .9rem; text-transform: uppercase; letter-spacing: .08em; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 9px; }
+    .footer-col a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .88rem; transition: color var(--trans); }
+    .footer-col a:hover { color: var(--gold2); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding-top: 24px; text-align: center; font-size: .82rem;
+    }
+    .footer-bottom a { color: var(--gold2); text-decoration: none; }
+
+    /* ── MODAL ────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(11,31,58,.6);
+      backdrop-filter: blur(4px); z-index: 1000;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white); border-radius: 12px;
+      padding: 36px; width: 100%; max-width: 500px;
+      max-height: 90vh; overflow-y: auto;
+      animation: slideUp .3s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; }
+    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); padding: 4px; line-height: 1; }
+    .modal-close:hover { color: var(--navy); }
+
+    /* ── PAGE SECTIONS ────────────────────────────────────────── */
+    .page-hero {
+      background: var(--navy); padding: 60px 0;
+      border-bottom: 3px solid var(--gold);
+    }
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--white); margin-bottom: 10px;
+    }
+    .page-hero p { color: rgba(255,255,255,.65); font-size: 1.05rem; }
+    .breadcrumb { font-size: .82rem; color: rgba(255,255,255,.5); margin-bottom: 12px; }
+    .breadcrumb span { color: var(--gold2); }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner, .why-inner, .contact-inner, .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .step:not(:last-child)::after { display: none; }
+      .campus-grid { grid-template-columns: 1fr 1fr; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links, .topbar-links { display: none; }
+      .hamburger { display: flex; }
+      .steps, .campus-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .programs-header { flex-direction: column; align-items: flex-start; }
+      .hero-card { display: none; }
+    }
+    .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 70px; left: 0; right: 0; background: var(--white); padding: 16px; border-bottom: 2px solid var(--gold); box-shadow: var(--shadow); }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="container">
+    <span>📍 Grande Prairie, Alberta, Canada</span>
+    <div class="topbar-links">
+      <a href="#contact">Contact Us</a>
+      <a href="#" id="topbar-portal-link">Student Portal</a>
+      <a href="#">myWAIT Login</a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="container nav-inner">
+    <a href="#home" class="logo" onclick="showPage('home')">
+      <div class="logo-badge">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-abbr">WAIT</div>
+        <div class="logo-full">Western Alberta Institute of Technology</div>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#" onclick="showPage('home')">Home</a></li>
+      <li><a href="#" onclick="showPage('programs')">Programs</a></li>
+      <li><a href="#" onclick="showPage('admissions')">Admissions</a></li>
+      <li><a href="#" onclick="showPage('campus')">Campus Life</a></li>
+      <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <span id="nav-user-info" class="hidden"></span>
+      <button class="btn btn-outline btn-sm hidden" id="btn-logout" onclick="logout()">Log Out</button>
+      <button class="btn btn-outline btn-sm" id="btn-login-nav" onclick="openModal('login')">Log In</button>
+      <button class="btn btn-primary btn-sm" id="btn-register-nav" onclick="openModal('register')">Apply Now</button>
+    </div>
+
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════ PAGE: HOME ═══════════════════════════ -->
+<div id="page-home">
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="container hero-inner">
+      <div>
+        <span class="section-label" style="color:var(--gold2);">Grande Prairie, Alberta</span>
+        <h1>Shape Your Future at <span>WAIT</span></h1>
+        <p>Western Alberta Institute of Technology delivers industry-aligned education that turns ambition into career-ready skills. Start your journey with us today.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="openModal('register')">Apply for Fall 2025</button>
+          <button class="btn btn-white" onclick="showPage('programs')">Explore Programs</button>
+        </div>
+      </div>
+      <div class="hero-card">
+        <p style="color:rgba(255,255,255,.5);font-size:.85rem;margin-bottom:16px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;">WAIT by the Numbers</p>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num">8,400+</div><div class="stat-label">Students Enrolled</div></div>
+          <div class="stat"><div class="stat-num">120+</div><div class="stat-label">Programs Offered</div></div>
+          <div class="stat"><div class="stat-num">92%</div><div class="stat-label">Graduate Employment</div></div>
+          <div class="stat"><div class="stat-num">1972</div><div class="stat-label">Year Founded</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS PREVIEW -->
+  <section class="programs">
+    <div class="container">
+      <div class="programs-header">
+        <div>
+          <span class="section-label">Areas of Study</span>
+          <h2 class="section-title">Find Your Program</h2>
+          <p class="section-sub">Over 120 programs designed with industry partners to get you job-ready from day one.</p>
+        </div>
+        <button class="btn btn-outline" onclick="showPage('programs')">View All Programs →</button>
+      </div>
+      <div class="programs-grid">
+        <div class="program-card">
+          <div class="program-icon">💻</div>
+          <h3>Information Technology</h3>
+          <p>Software development, cybersecurity, networking, and data analytics streams.</p>
+          <div class="program-meta">
+            <span class="program-tag">2–4 Years</span>
+            <span class="program-tag">Diploma / Degree</span>
+          </div>
+        </div>
+        <div class="program-card">
+          <div class="program-icon">⚙️</div>
+          <h3>Engineering Technology</h3>
+          <p>Mechanical, electrical, civil, and petroleum engineering technology programs.</p>
+          <div class="program-meta">
+            <span class="program-tag">2 Years</span>
+            <span class="program-tag">Diploma</span>
+          </div>
+        </div>
+        <div class="program-card">
+          <div class="program-icon">🏥</div>
+          <h3>Health & Human Services</h3>
+          <p>Nursing, medical office admin, health care aide, and social work programs.</p>
+          <div class="program-meta">
+            <span class="program-tag">1–3 Years</span>
+            <span class="program-tag">Certificate / Diploma</span>
+          </div>
+        </div>
+        <div class="program-card">
+          <div class="program-icon">🏗️</div>
+          <h3>Trades & Apprenticeship</h3>
+          <p>Welding, pipefitting, electrician, heavy equipment, and carpentry trades.</p>
+          <div class="program-meta">
+            <span class="program-tag">1–4 Years</span>
+            <span class="program-tag">Certificate / Red Seal</span>
+          </div>
+        </div>
+        <div class="program-card">
+          <div class="program-icon">📊</div>
+          <h3>Business &amp; Administration</h3>
+          <p>Accounting, marketing, HR, project management, and entrepreneurship.</p>
+          <div class="program-meta">
+            <span class="program-tag">2 Years</span>
+            <span class="program-tag">Diploma / Degree</span>
+          </div>
+        </div>
+        <div class="program-card">
+          <div class="program-icon">🎨</div>
+          <h3>Creative Arts &amp; Design</h3>
+          <p>Graphic design, digital media, interior design, and photography programs.</p>
+          <div class="program-meta">
+            <span class="program-tag">2 Years</span>
+            <span class="program-tag">Diploma</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY WAIT -->
+  <section class="why">
+    <div class="container why-inner">
+      <div>
+        <span class="section-label">Why Choose WAIT</span>
+        <h2 class="section-title">Alberta's Premier Polytechnic Institute</h2>
+        <p class="section-sub">We connect classroom learning to real-world careers with hands-on labs, industry mentors, and guaranteed co-op placements.</p>
+        <div class="features">
+          <div class="feature"><div class="feat-icon">🤝</div><div><h4>Industry Partnerships</h4><p>200+ employer partners guarantee real-world project experience.</p></div></div>
+          <div class="feature"><div class="feat-icon">🎓</div><div><h4>Financial Aid Available</h4><p>Scholarships, bursaries, and Alberta student loans to support your journey.</p></div></div>
+          <div class="feature"><div class="feat-icon">🛠️</div><div><h4>Hands-On Learning</h4><p>State-of-the-art labs and simulation centres for applied skills training.</p></div></div>
+          <div class="feature"><div class="feat-icon">📍</div><div><h4>Local &amp; Northern Focus</h4><p>Programs designed around the unique needs of Alberta's energy sector and communities.</p></div></div>
+        </div>
+      </div>
+      <div class="why-image">
+        <div class="wi-box"><div class="wi-num">92%</div><div class="wi-text">Graduate Employment Rate</div></div>
+        <div class="wi-box accent"><div class="wi-num">200+</div><div class="wi-text">Industry Partners</div></div>
+        <div class="wi-box"><div class="wi-num">50+</div><div class="wi-text">Years of Excellence</div></div>
+        <div class="wi-box"><div class="wi-num">#1</div><div class="wi-text">in Northern Alberta</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMISSIONS STEPS -->
+  <section class="admissions">
+    <div class="container">
+      <div style="text-align:center; margin-bottom: 0;">
+        <span class="section-label">How to Apply</span>
+        <h2 class="section-title">Your Application Journey</h2>
+        <p class="section-sub" style="margin: 0 auto;">Four simple steps to begin your education at WAIT.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><h4>Create an Account</h4><p>Register online to access the student portal and application system.</p></div>
+        <div class="step"><div class="step-num">2</div><h4>Choose a Program</h4><p>Browse our programs and select the one that fits your goals.</p></div>
+        <div class="step"><div class="step-num">3</div><h4>Submit Application</h4><p>Complete your online application form and upload required documents.</p></div>
+        <div class="step"><div class="step-num">4</div><h4>Get Your Offer</h4><p>Receive your offer letter and secure your seat with a deposit.</p></div>
+      </div>
+      <div style="text-align:center; margin-top: 40px;">
+        <button class="btn btn-primary" onclick="openModal('register')">Start Your Application</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAMPUS LIFE PREVIEW -->
+  <section class="campus">
+    <div class="container">
+      <span class="section-label">Life at WAIT</span>
+      <h2 class="section-title">More Than Just Classes</h2>
+      <div class="campus-grid">
+        <div class="campus-card">
+          <div class="campus-img bg1">🏋️</div>
+          <div class="campus-body"><h4>Athletics &amp; Recreation</h4><p>State-of-the-art gym, fitness classes, intramural sports, and competitive teams.</p></div>
+        </div>
+        <div class="campus-card">
+          <div class="campus-img bg2">🏠</div>
+          <div class="campus-body"><h4>Student Housing</h4><p>On-campus residences with furnished suites, study lounges, and communal kitchens.</p></div>
+        </div>
+        <div class="campus-card">
+          <div class="campus-img bg3">🎭</div>
+          <div class="campus-body"><h4>Clubs &amp; Events</h4><p>50+ student clubs, cultural events, hackathons, and leadership development programs.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div>
+          <span class="section-label">Get in Touch</span>
+          <h2 class="section-title">We're Here to Help</h2>
+          <p class="section-sub" style="margin-bottom:32px;">Whether you're a future student, parent, or employer — our team is ready to answer your questions.</p>
+          <div class="contact-detail">
+            <div class="cd-icon">📍</div>
+            <div class="cd-text"><h5>Campus Address</h5><p>10726 – 106 Avenue, Grande Prairie, AB T8V 4C4</p></div>
+          </div>
+          <div class="contact-detail">
+            <div class="cd-icon">📞</div>
+            <div class="cd-text"><h5>Phone</h5><p>1-888-WAIT-EDU &nbsp;|&nbsp; (780) 555-0100</p></div>
+          </div>
+          <div class="contact-detail">
+            <div class="cd-icon">✉️</div>
+            <div class="cd-text"><h5>Email</h5><p>admissions@wait.ab.ca</p></div>
+          </div>
+          <div class="contact-detail">
+            <div class="cd-icon">🕐</div>
+            <div class="cd-text"><h5>Office Hours</h5><p>Mon–Fri: 8:00 AM – 4:30 PM MST</p></div>
+          </div>
+        </div>
+        <div class="form-card">
+          <h3>Send Us a Message</h3>
+          <p class="subtitle">We typically respond within 1–2 business days.</p>
+          <div id="contact-alert"></div>
+          <div class="form-row">
+            <div class="form-group"><label>Your Name</label><input type="text" id="c-name" placeholder="Jane Smith" /></div>
+            <div class="form-group"><label>Email Address</label><input type="email" id="c-email" placeholder="jane@email.com" /></div>
+          </div>
+          <div class="form-group"><label>Subject</label><input type="text" id="c-subject" placeholder="Program inquiry..." /></div>
+          <div class="form-group"><label>Message</label><textarea id="c-message" placeholder="How can we help you?"></textarea></div>
+          <button class="btn btn-primary" style="width:100%;" onclick="submitContact()">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+
+<!-- ═══════════════════════ PAGE: PROGRAMS ═══════════════════════ -->
+<div id="page-programs" class="hidden">
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">Home / <span>Programs</span></div>
+      <h1>Academic Programs</h1>
+      <p>Over 120 programs spanning trades, technology, health, business, and creative arts.</p>
+    </div>
+  </div>
+  <section class="programs" style="background:var(--white);">
+    <div class="container">
+      <div class="programs-grid" id="all-programs-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════ PAGE: ADMISSIONS ═══════════════════════ -->
+<div id="page-admissions" class="hidden">
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">Home / <span>Admissions</span></div>
+      <h1>Admissions</h1>
+      <p>Everything you need to know about applying to WAIT.</p>
+    </div>
+  </div>
+  <section style="padding:70px 0;">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+        <div>
+          <span class="section-label">Requirements</span>
+          <h2 class="section-title" style="margin-bottom:20px;">Entry Requirements</h2>
+          <div class="dash-card" style="margin-bottom:20px;">
+            <h4>High School Diploma Programs</h4>
+            <ul style="padding-left:20px;line-height:2;color:var(--gray);">
+              <li>Alberta High School Diploma or equivalent</li>
+              <li>Minimum 60% average in required courses</li>
+              <li>English 30-1 or 30-2</li>
+              <li>Math 20-1 or 20-2 (program dependent)</li>
+            </ul>
+          </div>
+          <div class="dash-card">
+            <h4>International Students</h4>
+            <ul style="padding-left:20px;line-height:2;color:var(--gray);">
+              <li>Valid Study Permit required</li>
+              <li>IELTS 6.0 overall (or equivalent)</li>
+              <li>Official transcripts (translated to English)</li>
+              <li>Proof of financial support</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <span class="section-label">Key Dates</span>
+          <h2 class="section-title" style="margin-bottom:20px;">Important Deadlines</h2>
+          <div class="dash-card">
+            <div class="info-row"><span>Fall 2025 Applications Open</span><span style="color:var(--green);">Nov 1, 2024</span></div>
+            <div class="info-row"><span>Priority Application Deadline</span><span>Mar 1, 2025</span></div>
+            <div class="info-row"><span>Final Application Deadline</span><span>Jun 1, 2025</span></div>
+            <div class="info-row"><span>Fall Semester Start</span><span>Sep 2, 2025</span></div>
+            <div class="info-row"><span>Winter 2026 Applications Open</span><span>Sep 1, 2025</span></div>
+            <div class="info-row"><span>Winter Semester Start</span><span>Jan 5, 2026</span></div>
+          </div>
+          <div style="margin-top:24px;">
+            <button class="btn btn-primary" style="width:100%;" onclick="openModal('register')">Apply Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════ PAGE: CAMPUS ═══════════════════════ -->
+<div id="page-campus" class="hidden">
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">Home / <span>Campus Life</span></div>
+      <h1>Life at WAIT</h1>
+      <p>A vibrant campus community in the heart of Grande Prairie, Alberta.</p>
+    </div>
+  </div>
+  <section style="padding:70px 0;">
+    <div class="container">
+      <div class="campus-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));">
+        <div class="campus-card"><div class="campus-img bg1">🏋️</div><div class="campus-body"><h4>Athletics &amp; Fitness</h4><p>Fully-equipped fitness centre, pool, courts, and competitive varsity teams in multiple sports.</p></div></div>
+        <div class="campus-card"><div class="campus-img bg2">🏠</div><div class="campus-body"><h4>Student Residences</h4><p>Safe, modern, affordable on-campus housing with meal plan options.</p></div></div>
+        <div class="campus-card"><div class="campus-img bg3">🍽️</div><div class="campus-body"><h4>Dining Services</h4><p>Multiple cafeterias, coffee shops, and food stations across campus.</p></div></div>
+        <div class="campus-card"><div class="campus-img bg1">📚</div><div class="campus-body"><h4>Library &amp; Study Spaces</h4><p>Award-winning library with 24/7 study rooms, digital resources, and research support.</p></div></div>
+        <div class="campus-card"><div class="campus-img bg2">🧑‍⚕️</div><div class="campus-body"><h4>Health &amp; Wellness</h4><p>On-campus health clinic, mental health counselling, and wellness programs.</p></div></div>
+        <div class="campus-card"><div class="campus-img bg3">🎭</div><div class="campus-body"><h4>Student Association</h4><p>Over 50 clubs, student government, events programming, and advocacy services.</p></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════ PAGE: CONTACT ═══════════════════════ -->
+<div id="page-contact" class="hidden">
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">Home / <span>Contact</span></div>
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you. Reach out any time.</p>
+    </div>
+  </div>
+  <section class="contact" style="padding-top:60px;">
+    <div class="container">
+      <div class="contact-inner">
+        <div>
+          <div class="contact-detail"><div class="cd-icon">📍</div><div class="cd-text"><h5>Campus Address</h5><p>10726 – 106 Avenue, Grande Prairie, AB T8V 4C4</p></div></div>
+          <div class="contact-detail"><div class="cd-icon">📞</div><div class="cd-text"><h5>Phone</h5><p>1-888-WAIT-EDU &nbsp;|&nbsp; (780) 555-0100</p></div></div>
+          <div class="contact-detail"><div class="cd-icon">✉️</div><div class="cd-text"><h5>Email</h5><p>admissions@wait.ab.ca</p></div></div>
+          <div class="contact-detail"><div class="cd-icon">🕐</div><div class="cd-text"><h5>Office Hours</h5><p>Mon–Fri: 8:00 AM – 4:30 PM MST</p></div></div>
+        </div>
+        <div class="form-card">
+          <h3>Send Us a Message</h3>
+          <p class="subtitle">We typically respond within 1–2 business days.</p>
+          <div id="contact-alert-2"></div>
+          <div class="form-row">
+            <div class="form-group"><label>Your Name</label><input type="text" id="c2-name" placeholder="Jane Smith" /></div>
+            <div class="form-group"><label>Email Address</label><input type="email" id="c2-email" placeholder="jane@email.com" /></div>
+          </div>
+          <div class="form-group"><label>Subject</label><input type="text" id="c2-subject" placeholder="Program inquiry..." /></div>
+          <div class="form-group"><label>Message</label><textarea id="c2-message" placeholder="How can we help you?"></textarea></div>
+          <button class="btn btn-primary" style="width:100%;" onclick="submitContact2()">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════ PAGE: DASHBOARD ═══════════════════════ -->
+<div id="page-dashboard" class="hidden">
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">Home / <span>Student Portal</span></div>
+      <h1 id="dash-welcome">Student Dashboard</h1>
+      <p>Manage your profile, program, and registration details.</p>
+    </div>
+  </div>
+  <section id="dashboard-section">
+    <div class="container">
+      <div class="dashboard-header">
+        <h2>My Profile</h2>
+        <button class="btn btn-outline btn-sm" onclick="logout()">Log Out</button>
+      </div>
+      <div class="dashboard-grid" id="dashboard-content">
+        <div class="dash-card">
+          <h4>Personal Information</h4>
+          <div id="dash-personal"></div>
+        </div>
+        <div class="dash-card">
+          <h4>Academic Information</h4>
+          <div id="dash-academic"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════════════════════ MODALS ═══════════════════════════════ -->
+<!-- Register / Login Modal -->
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Student Portal</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="form-tabs">
+      <button class="form-tab active" id="tab-register" onclick="switchTab('register')">Register</button>
+      <button class="form-tab" id="tab-login" onclick="switchTab('login')">Log In</button>
+    </div>
+
+    <div id="modal-alert"></div>
+
+    <!-- REGISTER FORM -->
+    <div id="form-register">
+      <div class="form-row">
+        <div class="form-group"><label>First Name *</label><input id="r-fname" type="text" placeholder="Jane" /></div>
+        <div class="form-group"><label>Last Name *</label><input id="r-lname" type="text" placeholder="Smith" /></div>
+      </div>
+      <div class="form-group"><label>Email Address *</label><input id="r-email" type="email" placeholder="jane@email.com" /></div>
+      <div class="form-group"><label>Password * <small style="color:var(--gray);font-weight:400;">(min. 8 characters)</small></label><input id="r-password" type="password" placeholder="••••••••" /></div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone Number</label><input id="r-phone" type="tel" placeholder="(780) 555-0000" /></div>
+        <div class="form-group"><label>Date of Birth</label><input id="r-dob" type="date" /></div>
+      </div>
+      <div class="form-group">
+        <label>Program of Interest</label>
+        <select id="r-program">
+          <option value="">— Select a program —</option>
+          <option>Information Technology — Software Development</option>
+          <option>Information Technology — Cybersecurity</option>
+          <option>Information Technology — Networking</option>
+          <option>Engineering Technology — Mechanical</option>
+          <option>Engineering Technology — Electrical</option>
+          <option>Engineering Technology — Civil</option>
+          <option>Health &amp; Human Services — Nursing</option>
+          <option>Health &amp; Human Services — Health Care Aide</option>
+          <option>Trades — Welding</option>
+          <option>Trades — Pipefitting</option>
+          <option>Trades — Electrician</option>
+          <option>Business — Accounting</option>
+          <option>Business — Marketing</option>
+          <option>Creative Arts — Graphic Design</option>
+          <option>Creative Arts — Digital Media</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitRegister()">Create Account &amp; Apply</button>
+      <p style="font-size:.82rem;color:var(--gray);margin-top:12px;text-align:center;">By registering, you agree to WAIT's <a href="#" style="color:var(--gold);">Terms of Use</a> and <a href="#" style="color:var(--gold);">Privacy Policy</a>.</p>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login" class="hidden">
+      <div class="form-group"><label>Email Address</label><input id="l-email" type="email" placeholder="jane@email.com" /></div>
+      <div class="form-group"><label>Password</label><input id="l-password" type="password" placeholder="••••••••" /></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitLogin()">Log In</button>
+      <p style="font-size:.82rem;color:var(--gray);margin-top:12px;text-align:center;"><a href="#" style="color:var(--gold);">Forgot your password?</a></p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div class="logo-badge"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div><div class="logo-abbr" style="color:var(--white);">WAIT</div><div class="logo-full">Western Alberta Institute of Technology</div></div>
+        </div>
+        <p>Delivering industry-aligned polytechnic education to the people of Northern Alberta since 1972.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Programs</h5>
+        <ul>
+          <li><a href="#">Information Technology</a></li>
+          <li><a href="#">Engineering Technology</a></li>
+          <li><a href="#">Health &amp; Human Services</a></li>
+          <li><a href="#">Trades &amp; Apprenticeship</a></li>
+          <li><a href="#">Business</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Admissions</h5>
+        <ul>
+          <li><a href="#" onclick="showPage('admissions')">How to Apply</a></li>
+          <li><a href="#">Tuition &amp; Fees</a></li>
+          <li><a href="#">Financial Aid</a></li>
+          <li><a href="#">International Students</a></li>
+          <li><a href="#">Book a Tour</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Campus</h5>
+        <ul>
+          <li><a href="#">Student Services</a></li>
+          <li><a href="#">Library</a></li>
+          <li><a href="#">Athletics</a></li>
+          <li><a href="#">Housing</a></li>
+          <li><a href="#">Campus Map</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Western Alberta Institute of Technology. All rights reserved. &nbsp;|&nbsp; <a href="#">Privacy Policy</a> &nbsp;|&nbsp; <a href="#">Accessibility</a> &nbsp;|&nbsp; <a href="#">Sitemap</a></p>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // ─── STATE ────────────────────────────────────────────────────
+  let currentStudent = null;
+
+  // ─── PAGE ROUTING ─────────────────────────────────────────────
+  const pages = ['home','programs','admissions','campus','contact','dashboard'];
+
+  function showPage(name) {
+    pages.forEach(p => {
+      const el = document.getElementById('page-' + p);
+      if (el) el.classList.add('hidden');
+    });
+    const target = document.getElementById('page-' + name);
+    if (target) target.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (name === 'programs') renderAllPrograms();
+  }
+
+  // ─── MODAL ────────────────────────────────────────────────────
+  function openModal(tab) {
+    document.getElementById('auth-modal').classList.add('open');
+    switchTab(tab || 'register');
+  }
+  function closeModal() {
+    document.getElementById('auth-modal').classList.remove('open');
+    clearAlert('modal-alert');
+  }
+  document.getElementById('auth-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  function switchTab(tab) {
+    document.getElementById('form-register').classList.toggle('hidden', tab !== 'register');
+    document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('modal-title').textContent = tab === 'register' ? 'Create an Account' : 'Student Login';
+    clearAlert('modal-alert');
+  }
+
+  // ─── ALERTS ───────────────────────────────────────────────────
+  function showAlert(id, msg, type) {
+    const el = document.getElementById(id);
+    el.className = 'alert ' + type;
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+  function clearAlert(id) {
+    const el = document.getElementById(id);
+    el.className = 'alert';
+    el.style.display = 'none';
+  }
+
+  // ─── AUTH STATE ───────────────────────────────────────────────
+  function setLoggedIn(student) {
+    currentStudent = student;
+    document.getElementById('nav-user-info').textContent = '👤 ' + student.name;
+    document.getElementById('nav-user-info').classList.remove('hidden');
+    document.getElementById('btn-logout').classList.remove('hidden');
+    document.getElementById('btn-login-nav').classList.add('hidden');
+    document.getElementById('btn-register-nav').classList.add('hidden');
+  }
+  function setLoggedOut() {
+    currentStudent = null;
+    document.getElementById('nav-user-info').classList.add('hidden');
+    document.getElementById('btn-logout').classList.add('hidden');
+    document.getElementById('btn-login-nav').classList.remove('hidden');
+    document.getElementById('btn-register-nav').classList.remove('hidden');
+  }
+
+  // ─── REGISTER ────────────────────────────────────────────────
+  async function submitRegister() {
+    const body = {
+      first_name: document.getElementById('r-fname').value.trim(),
+      last_name:  document.getElementById('r-lname').value.trim(),
+      email:      document.getElementById('r-email').value.trim(),
+      password:   document.getElementById('r-password').value,
+      phone:      document.getElementById('r-phone').value.trim(),
+      program:    document.getElementById('r-program').value,
+      dob:        document.getElementById('r-dob').value || undefined,
+    };
+
+    if (!body.first_name || !body.last_name || !body.email || !body.password) {
+      showAlert('modal-alert', 'Please fill in all required fields.', 'error'); return;
+    }
+
+    try {
+      const res  = await fetch('/api/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+      const data = await res.json();
+      if (!res.ok) { showAlert('modal-alert', data.error || 'Registration failed.', 'error'); return; }
+
+      showAlert('modal-alert', '🎉 Welcome to WAIT! Your account has been created.', 'success');
+      setLoggedIn(data.student);
+      setTimeout(() => { closeModal(); showPage('dashboard'); loadDashboard(); }, 1600);
+    } catch (e) {
+      showAlert('modal-alert', 'Network error. Please try again.', 'error');
+    }
+  }
+
+  // ─── LOGIN ────────────────────────────────────────────────────
+  async function submitLogin() {
+    const body = {
+      email:    document.getElementById('l-email').value.trim(),
+      password: document.getElementById('l-password').value,
+    };
+
+    if (!body.email || !body.password) {
+      showAlert('modal-alert', 'Please enter your email and password.', 'error'); return;
+    }
+
+    try {
+      const res  = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+      const data = await res.json();
+      if (!res.ok) { showAlert('modal-alert', data.error || 'Login failed.', 'error'); return; }
+
+      setLoggedIn(data.student);
+      closeModal();
+      showPage('dashboard');
+      loadDashboard();
+    } catch (e) {
+      showAlert('modal-alert', 'Network error. Please try again.', 'error');
+    }
+  }
+
+  // ─── LOGOUT ───────────────────────────────────────────────────
+  async function logout() {
+    await fetch('/api/logout', { method:'POST' });
+    setLoggedOut();
+    showPage('home');
+  }
+
+  // ─── DASHBOARD ───────────────────────────────────────────────
+  async function loadDashboard() {
+    try {
+      const res  = await fetch('/api/me');
+      const data = await res.json();
+      if (!res.ok) return;
+
+      const s = data.student;
+      document.getElementById('dash-welcome').textContent = `Welcome back, ${s.first_name}!`;
+
+      document.getElementById('dash-personal').innerHTML = `
+        <div class="info-row"><span>Full Name</span><span>${s.first_name} ${s.last_name}</span></div>
+        <div class="info-row"><span>Email</span><span>${s.email}</span></div>
+        <div class="info-row"><span>Phone</span><span>${s.phone || '—'}</span></div>
+        <div class="info-row"><span>Date of Birth</span><span>${s.dob ? new Date(s.dob).toLocaleDateString('en-CA') : '—'}</span></div>
+        <div class="info-row"><span>Member Since</span><span>${new Date(s.created_at).toLocaleDateString('en-CA')}</span></div>
+      `;
+
+      document.getElementById('dash-academic').innerHTML = `
+        <div class="info-row"><span>Student ID</span><span>WAIT-${String(s.id).padStart(6,'0')}</span></div>
+        <div class="info-row"><span>Program</span><span>${s.program || 'Not yet selected'}</span></div>
+        <div class="info-row"><span>Status</span><span style="color:var(--green);font-weight:700;">✔ Active</span></div>
+        <div class="info-row"><span>Campus</span><span>Grande Prairie (Main)</span></div>
+        <div class="info-row"><span>Intake</span><span>Fall 2025</span></div>
+      `;
+    } catch(e) { console.error(e); }
+  }
+
+  // ─── CONTACT FORM ─────────────────────────────────────────────
+  async function doContact(name, email, subject, message, alertId) {
+    if (!name || !email || !message) { showAlert(alertId, 'Please fill in all required fields.', 'error'); return; }
+    try {
+      const res  = await fetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,subject,message}) });
+      const data = await res.json();
+      if (!res.ok) { showAlert(alertId, data.error || 'Failed to send.', 'error'); return; }
+      showAlert(alertId, '✅ ' + data.message, 'success');
+    } catch(e) { showAlert(alertId, 'Network error. Please try again.', 'error'); }
+  }
+  function submitContact() {
+    doContact(document.getElementById('c-name').value.trim(), document.getElementById('c-email').value.trim(), document.getElementById('c-subject').value.trim(), document.getElementById('c-message').value.trim(), 'contact-alert');
+  }
+  function submitContact2() {
+    doContact(document.getElementById('c2-name').value.trim(), document.getElementById('c2-email').value.trim(), document.getElementById('c2-subject').value.trim(), document.getElementById('c2-message').value.trim(), 'contact-alert-2');
+  }
+
+  // ─── PROGRAMS GRID ────────────────────────────────────────────
+  const allPrograms = [
+    { icon:'💻', name:'Software Development', cat:'Information Technology', duration:'2 Years', credential:'Diploma' },
+    { icon:'🔐', name:'Cybersecurity', cat:'Information Technology', duration:'2 Years', credential:'Diploma' },
+    { icon:'🌐', name:'Network Administration', cat:'Information Technology', duration:'2 Years', credential:'Diploma' },
+    { icon:'📊', name:'Data Analytics', cat:'Information Technology', duration:'2 Years', credential:'Diploma' },
+    { icon:'⚙️', name:'Mechanical Engineering Technology', cat:'Engineering Technology', duration:'2 Years', credential:'Diploma' },
+    { icon:'⚡', name:'Electrical Engineering Technology', cat:'Engineering Technology', duration:'2 Years', credential:'Diploma' },
+    { icon:'🏗️', name:'Civil Engineering Technology', cat:'Engineering Technology', duration:'2 Years', credential:'Diploma' },
+    { icon:'🛢️', name:'Petroleum Engineering Technology', cat:'Engineering Technology', duration:'2 Years', credential:'Diploma' },
+    { icon:'🏥', name:'Practical Nursing', cat:'Health &amp; Human Services', duration:'3 Years', credential:'Diploma' },
+    { icon:'🧑‍⚕️', name:'Health Care Aide', cat:'Health &amp; Human Services', duration:'1 Year', credential:'Certificate' },
+    { icon:'📋', name:'Medical Office Administration', cat:'Health &amp; Human Services', duration:'1 Year', credential:'Certificate' },
+    { icon:'🔩', name:'Welding', cat:'Trades &amp; Apprenticeship', duration:'1–4 Years', credential:'Certificate / Red Seal' },
+    { icon:'🔧', name:'Pipefitting', cat:'Trades &amp; Apprenticeship', duration:'1–4 Years', credential:'Certificate / Red Seal' },
+    { icon:'💡', name:'Electrician', cat:'Trades &amp; Apprenticeship', duration:'1–4 Years', credential:'Certificate / Red Seal' },
+    { icon:'🚛', name:'Heavy Equipment Operator', cat:'Trades &amp; Apprenticeship', duration:'1 Year', credential:'Certificate' },
+    { icon:'📈', name:'Business Administration', cat:'Business', duration:'2 Years', credential:'Diploma' },
+    { icon:'💰', name:'Accounting', cat:'Business', duration:'2 Years', credential:'Diploma' },
+    { icon:'📣', name:'Marketing', cat:'Business', duration:'2 Years', credential:'Diploma' },
+    { icon:'🎨', name:'Graphic Design', cat:'Creative Arts', duration:'2 Years', credential:'Diploma' },
+    { icon:'📹', name:'Digital Media Production', cat:'Creative Arts', duration:'2 Years', credential:'Diploma' },
+  ];
+
+  function renderAllPrograms() {
+    const grid = document.getElementById('all-programs-grid');
+    grid.innerHTML = allPrograms.map(p => `
+      <div class="program-card">
+        <div class="program-icon">${p.icon}</div>
+        <h3>${p.name}</h3>
+        <p style="font-size:.82rem;color:var(--gold);font-weight:600;margin-bottom:6px;">${p.cat}</p>
+        <div class="program-meta">
+          <span class="program-tag">${p.duration}</span>
+          <span class="program-tag">${p.credential}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ─── HAMBURGER ────────────────────────────────────────────────
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+
+  // ─── INIT: check session ──────────────────────────────────────
+  (async () => {
+    try {
+      const res  = await fetch('/api/me');
+      const data = await res.json();
+      if (res.ok && data.student) {
+        setLoggedIn({ name: data.student.first_name + ' ' + data.student.last_name, id: data.student.id, email: data.student.email });
+      }
+    } catch(e) {}
+  })();
+
+  // Topbar portal link
+  document.getElementById('topbar-portal-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    if (currentStudent) { showPage('dashboard'); loadDashboard(); }
+    else openModal('login');
+  });
+</script>
+</body>
+</html>
