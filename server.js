@@ -13,6 +13,9 @@ const { getPool, initDB, sql } = require('./db');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
+// ─── Trust Proxy (required for Azure) ──────────────────────────────────
+app.set('trust proxy', 1);
+
 // ─── Security Middleware ──────────────────────────────────────────────
 app.use(helmet({
   contentSecurityPolicy: {
