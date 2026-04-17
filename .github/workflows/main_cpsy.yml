@@ -49,7 +49,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'cpsy-fcb2gjgshzeudff4'
+          app-name: 'CPSY'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_795CCE79660049F487513914EA3A5D70 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D54B80090A8C40AD8A4FE26BB13A9DA4 }}
