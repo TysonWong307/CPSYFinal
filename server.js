@@ -28,8 +28,7 @@ app.use(helmet({
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(__dirname));
 // ─── Session ─────────────────────────────────────────────────────────
 app.use(session({
   secret: process.env.SESSION_SECRET || 'change-me-in-production',
@@ -235,7 +234,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
 
 // ── Catch-all: serve frontend ─────────────────────────────────────────
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // ─── Start Server ─────────────────────────────────────────────────────
