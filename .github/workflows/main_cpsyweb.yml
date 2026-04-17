@@ -52,4 +52,4 @@ jobs:
           app-name: 'CPSYWeb'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4D3F58F54DCA46B58397394A62B155FB }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_031110ADC8884BFBA9B2F398DCA891FC }}
